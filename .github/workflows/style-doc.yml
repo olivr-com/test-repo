@@ -1,0 +1,41 @@
+name: 'Style and documentation'
+
+on: push
+
+jobs:
+  main:
+    name: Style and documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Lint - Download config
+        uses: olivr-com/common-file-action@v1
+        with:
+          url: https://raw.githubusercontent.com/olivr-com/defaults/master/linters/markdown/.markdownlint.yml
+
+      - name: Docs - Code of Conduct
+        uses: olivr-com/common-file-action@v1
+        with:
+          url: https://raw.githubusercontent.com/olivr-com/defaults/master/docs/CODE_OF_CONDUCT.md
+
+      - name: Docs - Security
+        uses: olivr-com/common-file-action@v1
+        with:
+          url: https://raw.githubusercontent.com/olivr-com/defaults/master/docs/SECURITY.md
+
+      - name: Lint - Markdown
+        uses: avto-dev/markdown-lint@v1
+        with:
+          args: '**/*.md'
+          fix: true
+          config: .markdownlint.yml
+
+      - name: Lint - Cleanup
+        run: rm -rf .markdownlint.yml
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.1.6
+        with:
+          commit_message: Update documentation
+          branch: ${{ github.head_ref }}
