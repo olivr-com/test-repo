@@ -9,6 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Docs - Readme PWD
+        uses: olivr-com/inject-command-action@v1
+        with:
+          command: pwd | sed 's/\// /g'
+          target: README.md
+          force: false
+
       - name: Lint - Download config
         uses: olivr-com/download-file-action@v1
         with:
@@ -29,13 +36,6 @@ jobs:
         with:
           url: https://raw.githubusercontent.com/olivr-com/defaults/master/readme/license.md
           target: README.md
-
-      - name: Docs - Readme PWD
-        uses: olivr-com/inject-command-action@v1
-        with:
-          command: pwd | sed 's/\// /g'
-          target: README.md
-          force: true
 
       - name: Lint - Markdown
         uses: avto-dev/markdown-lint@v1
