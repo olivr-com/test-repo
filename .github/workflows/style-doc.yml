@@ -10,22 +10,22 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Lint - Download config
-        uses: olivr-com/common-file-action@v1
+        uses: olivr-com/download-file-action@v1
         with:
           url: https://raw.githubusercontent.com/olivr-com/defaults/master/linters/markdown/.markdownlint.yml
 
       - name: Docs - Code of Conduct
-        uses: olivr-com/common-file-action@v1
+        uses: olivr-com/download-file-action@v1
         with:
           url: https://raw.githubusercontent.com/olivr-com/defaults/master/docs/CODE_OF_CONDUCT.md
 
-      - name: Docs - Security
-        uses: olivr-com/common-file-action@v1
+      - name: Docs - License
+        uses: olivr-com/download-file-action@v1
         with:
-          url: https://raw.githubusercontent.com/olivr-com/defaults/master/docs/SECURITY.md
+          url: https://raw.githubusercontent.com/olivr-com/defaults/master/LICENSE
 
       - name: Docs - Readme License
-        uses: olivr-com/inject-file-action@master
+        uses: olivr-com/inject-file-action@v1
         with:
           url: https://raw.githubusercontent.com/olivr-com/defaults/master/readme/license.md
           target: README.md
