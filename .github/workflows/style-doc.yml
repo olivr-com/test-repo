@@ -24,6 +24,12 @@ jobs:
         with:
           url: https://raw.githubusercontent.com/olivr-com/defaults/master/docs/SECURITY.md
 
+      - name: Docs - Readme License
+        uses: olivr-com/inject-file-action@master
+        with:
+          url: https://raw.githubusercontent.com/olivr-com/defaults/master/readme/license.md
+          target: README.md
+
       - name: Lint - Markdown
         uses: avto-dev/markdown-lint@v1
         with:
