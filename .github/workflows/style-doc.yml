@@ -47,8 +47,16 @@ jobs:
       - name: Lint - Cleanup
         run: rm -rf .markdownlint.yml
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4.1.6
-        with:
-          commit_message: Update documentation
-          branch: ${{ github.head_ref }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+      #- name: Create branch
+      #  uses: peterjgrainger/action-create-branch@v1.0.0
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  with:
+      #    branch: documentation-${{ github.head_ref }}
+      #- name: Commit changes
+      #  uses: stefanzweifel/git-auto-commit-action@v4.1.6
+      #  with:
+      #    commit_message: Update documentation
+      #    branch: documentation-update
