@@ -16,6 +16,7 @@ jobs:
         uses: peter-evans/create-pull-request@v2
         with:
           branch-suffix: random
+          labels: automerge
   main:
     name: Style and documentation
     runs-on: ubuntu-latest
@@ -64,6 +65,7 @@ jobs:
         uses: peter-evans/create-pull-request@v2
         with:
           branch-suffix: random
+          labels: automerge
       #- name: Create branch
       #  uses: peterjgrainger/action-create-branch@v1.0.0
       #  env:
