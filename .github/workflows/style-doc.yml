@@ -18,7 +18,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v2
         with:
-          branch: ${{ format('auto-documentation-{1}', github.head_ref) }}
+          branch: ${{ format('auto-documentation-{1}', {{github.head_ref}}) }}
   main:
     needs: test
     name: Style and documentation
