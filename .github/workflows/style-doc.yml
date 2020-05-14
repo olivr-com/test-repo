@@ -2,6 +2,9 @@ name: 'Style and documentation'
 
 on: push
 
+env:
+  id: documentation
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -18,7 +21,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v2
         with:
-          branch: auto-documentation-${{github.ref}}
+          branch: auto-${{env.id}}-${{github.ref}}
   main:
     needs: test
     name: Style and documentation
@@ -27,12 +30,10 @@ jobs:
       - uses: actions/checkout@master
         if: ${{ needs.test.outputs.pull_request > 0 }}
         with:
-          ref: auto-documentation-${{github.ref}}
+          ref: auto-${{env.id}}-${{github.ref}}
 
       - uses: actions/checkout@master
         if: ${{ needs.test.outputs.pull_request == 0 }}
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Docs - Readme PWD
         uses: olivr-com/inject-command-action@v1
