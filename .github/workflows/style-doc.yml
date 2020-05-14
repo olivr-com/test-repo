@@ -3,6 +3,17 @@ name: 'Style and documentation'
 on: push
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Docs - Readme License
+        uses: olivr-com/inject-file-action@v1
+        with:
+          url: https://raw.githubusercontent.com/olivr-com/defaults/master/readme/license.md
+          target: SECURITY.md
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
   main:
     name: Style and documentation
     runs-on: ubuntu-latest
