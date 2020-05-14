@@ -5,6 +5,8 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      pull_request: ${{ steps.cpr.outputs.pull-request-number }}
     steps:
       - uses: actions/checkout@master
       - name: Docs - Readme License
@@ -13,15 +15,24 @@ jobs:
           url: https://raw.githubusercontent.com/olivr-com/defaults/master/readme/license.md
           target: SECURITY.md
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v2
         with:
-          branch-suffix: random
-          labels: automerge
+          branch: auto-documentation-${{ github.head_ref }}
   main:
+    needs: test
     name: Style and documentation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        if: ${{ needs.test.outputs.pull_request > 0 }}
+        with:
+          ref: auto-documentation-${{ github.head_ref }}
+
+      - uses: actions/checkout@master
+        if: ${{ needs.test.outputs.pull_request == 0 }}
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Docs - Readme PWD
         uses: olivr-com/inject-command-action@v1
@@ -61,19 +72,14 @@ jobs:
       - name: Lint - Cleanup
         run: rm -rf .markdownlint.yml
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v2
-        with:
-          branch-suffix: random
-          labels: automerge
       #- name: Create branch
       #  uses: peterjgrainger/action-create-branch@v1.0.0
       #  env:
       #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #  with:
       #    branch: documentation-${{ github.head_ref }}
-      #- name: Commit changes
-      #  uses: stefanzweifel/git-auto-commit-action@v4.1.6
-      #  with:
-      #    commit_message: Update documentation
-      #    branch: documentation-update
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.1.6
+        with:
+          commit_message: Update documentation
+          branch: documentation-update
