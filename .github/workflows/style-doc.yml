@@ -18,7 +18,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v2
         with:
-          branch: ${{ format('auto-documentation-{1}', ${{github.ref}}) }}
+          branch: ${{ format('auto-documentation-{1}', {{github.ref}}) }}
   main:
     needs: test
     name: Style and documentation
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@master
         if: ${{ needs.test.outputs.pull_request > 0 }}
         with:
-          ref: ${{ format('auto-documentation-{1}', ${{github.ref}}) }}
+          ref: ${{ format('auto-documentation-{1}', {{github.ref}}) }}
 
       - uses: actions/checkout@master
         if: ${{ needs.test.outputs.pull_request == 0 }}
