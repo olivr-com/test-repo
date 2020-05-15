@@ -30,13 +30,11 @@ jobs:
       pull_request: ${{ steps.cpr.outputs.pull-request-number }}
     steps:
       - uses: actions/checkout@master
-        id: checkout
         if: ${{ needs.generic.outputs.pull_request > 0 }}
         with:
           ref: auto-${{env.id}}-${{github.ref}}
 
       - uses: actions/checkout@master
-        id: checkout
         if: ${{ needs.generic.outputs.pull_request == 0 }}
 
       - name: Docs - Readme PWD
