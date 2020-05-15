@@ -30,7 +30,8 @@ When we receive a security bug report, we will assign it to a primary handler. T
 If you have suggestions on how this process could be improved please submit a pull request.
 
 <!-- auto-license -->
-
 ## License
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
 
 <!-- auto-license -->
