@@ -102,5 +102,5 @@ jobs:
             github.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: process.env[pr_generic]
+              pull_number: process.env['pr_generic']
             })
