@@ -95,7 +95,7 @@ jobs:
       - uses: actions/github-script@master
         if: ${{ needs.generic.outputs.pull_request > 0 || needs.terraform.outputs.pull_request > 0 }}
         env:
-          pr_generic: ${{ needs.generic.outputs.pull_request || needs.terraform.outputs.pull_request || '' }}
+          pr_generic: ${{ needs.generic.outputs.pull_request || needs.terraform.outputs.pull_request }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
