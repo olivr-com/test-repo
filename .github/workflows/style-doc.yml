@@ -91,7 +91,7 @@ jobs:
           commit_message: Update documentation
 
   finalize:
-    needs: [test, terraform]
+    needs: [generic, terraform]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@master
