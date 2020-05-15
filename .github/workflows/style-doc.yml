@@ -77,16 +77,9 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
-        if: ${{ needs.generic.outputs.pull_request == 0 }}
         uses: peter-evans/create-pull-request@v2
         with:
           branch: auto-${{env.id}}-${{github.ref}}
-
-      - name: Commit changes
-        if: ${{ needs.generic.outputs.pull_request > 0 }}
-        uses: stefanzweifel/git-auto-commit-action@v4.1.6
-        with:
-          commit_message: Update documentation
 
   finalize:
     needs: [generic, terraform]
@@ -95,13 +88,12 @@ jobs:
       - uses: actions/github-script@master
         if: ${{ needs.generic.outputs.pull_request > 0 || needs.terraform.outputs.pull_request > 0 }}
         env:
-          pr_generic: ${{ needs.generic.outputs.pull_request }}
-          pr_terraform: ${{ needs.terraform.outputs.pull_request }}
+          pr_generic: ${{ needs.generic.outputs.pull_request || needs.terraform.outputs.pull_request }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github..pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: process.env['pr_generic'] || process.env['pr_terraform']
+              pull_number: process.env['pr_generic']
             })
