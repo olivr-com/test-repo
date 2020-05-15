@@ -23,7 +23,7 @@ jobs:
           branch: auto-${{env.id}}-${{github.ref}}
 
   terraform:
-    needs: test
+    needs: generic
     name: Style and documentation
     runs-on: ubuntu-latest
     outputs:
@@ -31,13 +31,13 @@ jobs:
     steps:
       - uses: actions/checkout@master
         id: checkout
-        if: ${{ needs.test.outputs.pull_request > 0 }}
+        if: ${{ needs.generic.outputs.pull_request > 0 }}
         with:
           ref: auto-${{env.id}}-${{github.ref}}
 
       - uses: actions/checkout@master
         id: checkout
-        if: ${{ needs.test.outputs.pull_request == 0 }}
+        if: ${{ needs.generic.outputs.pull_request == 0 }}
 
       - name: Docs - Readme PWD
         uses: olivr-com/inject-command-action@v1
@@ -79,13 +79,13 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
-        if: ${{ needs.test.outputs.pull_request == 0 }}
+        if: ${{ needs.generic.outputs.pull_request == 0 }}
         uses: peter-evans/create-pull-request@v2
         with:
           branch: auto-${{env.id}}-${{github.ref}}
 
       - name: Commit changes
-        if: ${{ needs.test.outputs.pull_request > 0 }}
+        if: ${{ needs.generic.outputs.pull_request > 0 }}
         uses: stefanzweifel/git-auto-commit-action@v4.1.6
         with:
           commit_message: Update documentation
@@ -95,14 +95,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@master
-        if: ${{ needs.test.outputs.pull_request > 0 || needs.terraform.outputs.pull_request > 0 }}
+        if: ${{ needs.generic.outputs.pull_request > 0 || needs.terraform.outputs.pull_request > 0 }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           env:
-            pr_number: ${{ needs.test.outputs.pull_request || needs.terraform.outputs.pull_request }}
+            pr_generic: ${{ needs.generic.outputs.pull_request }}
+            pr_terraform: ${{ needs.terraform.outputs.pull_request }}
           script: |
             github..pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: process.env['pr_number']
+              pull_number: process.env['pr_generic'] || process.env['pr_terraform']
             })
