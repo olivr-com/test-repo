@@ -29,13 +29,15 @@ jobs:
     outputs:
       pull_request: ${{ steps.cpr.outputs.pull-request-number }}
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout ${{env.id}} branch
         if: ${{ needs.generic.outputs.pull_request > 0 }}
+        uses: actions/checkout@master
         with:
           ref: auto-${{env.id}}-${{github.ref}}
 
-      - uses: actions/checkout@master
+      - name: Checkout workflow commit
         if: ${{ needs.generic.outputs.pull_request == 0 }}
+        uses: actions/checkout@master
 
       - name: Docs - Readme PWD
         uses: olivr-com/inject-command-action@v1
@@ -95,12 +97,12 @@ jobs:
       - uses: actions/github-script@master
         if: ${{ needs.generic.outputs.pull_request > 0 || needs.terraform.outputs.pull_request > 0 }}
         env:
-          pr_generic: ${{ needs.generic.outputs.pull_request || needs.terraform.outputs.pull_request }}
+          pr_number: ${{ needs.generic.outputs.pull_request || needs.terraform.outputs.pull_request }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: process.env['pr_generic']
+              pull_number: process.env['pr_number']
             })
